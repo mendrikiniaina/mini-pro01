@@ -1,31 +1,33 @@
 const express = require('express');
 const ejs = require('ejs');
-const server = express();
+const app = express();
 
 const port = 5500;
 const hostname = 'localhost';
 
-server.set('view engine', 'ejs');
+// Configurer EJS comme moteur de rendu de vues
+app.set('view engine', 'ejs');
 
-// route
-server.get('/', function(request, response){
-
-    var helloWorldText = '<!doctype html><html><head></head><body><h1>Bonjour, bienvenue sur ma page</h1></body></html>';
-
-    //response.send(helloWorldText);    
-    // response.render('index', {})
-    response.render('index', {});
-
-
+// Route principale
+app.get('/', function (request, response) {
+    const helloWorldText = '<!doctype html><html><head></head><body><h1>Bonjour, bienvenue sur ma page</h1></body></html>';
+    response.render('index', { text: helloWorldText });
 });
 
-server.get('/about', (request, response) => {
+// Autres routes
+app.get('/about', (request, response) => {
     response.send("About us");
 });
 
+app.get('/contact', (request, response) => {
+    response.send("Contactez-nous");
+});
 
-server.listen(port, hostname, function(){
+// Importer et utiliser le routeur `users`
+const usersRoute = require('./routes/users');
+app.use('/users', usersRoute);
 
-    console.log('Server running on port: ' + port);
-
+// Démarrer le serveur
+app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
 });
