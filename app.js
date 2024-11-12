@@ -2,6 +2,10 @@ const express = require('express');
 const ejs = require('ejs');
 const app = express();
 
+// Importer et utiliser le routeur `users`
+const usersRoute = require('./routes/users');
+
+
 const port = 5500;
 const hostname = 'localhost';
 
@@ -23,11 +27,14 @@ app.get('/contact', (request, response) => {
     response.send("Contactez-nous");
 });
 
-// Importer et utiliser le routeur `users`
-const usersRoute = require('./routes/users');
+
 app.use('/users', usersRoute);
 
 // Démarrer le serveur
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+// Serve les fichiers statiques à partir du répertoire 'public'
+app.use(express.static('public'));
+
